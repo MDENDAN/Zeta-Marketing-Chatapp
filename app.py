@@ -6,10 +6,10 @@ import os
 from vertexai.generative_models import GenerativeModel
 # --- Initialize GCP services ---
 
-# Setup credentials
-from google.auth import load_credentials_from_file
+from google.auth import default
 
-credentials, project = load_credentials_from_file(".secrets\credentials.json")
+# Use Application Default Credentials (ADC)
+credentials, project = default()
 
 
 # Initialize Vertex AI and BigQuery Client
