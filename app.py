@@ -14,7 +14,7 @@ credentials, project = load_credentials_from_file("./credentials/gcp_service_acc
 
 # Initialize Vertex AI and BigQuery Client
 vertexai.init(project=project, location="asia-south1", credentials=credentials)
-bq_client = bigquery.Client()
+bq_client = bigquery.Client(credentials= credentials, project=project)
 
 # Load Gemini Model
 model = TextGenerationModel.from_pretrained("gemini-1.5-pro-preview-0409")
