@@ -9,7 +9,7 @@ import os
 # Setup credentials
 from google.auth import load_credentials_from_file
 
-credentials, project = load_credentials_from_file("credentials/gcp_service_account.json")
+credentials, project = load_credentials_from_file("./credentials/gcp_service_account.json")
 
 
 # Initialize Vertex AI and BigQuery Client
