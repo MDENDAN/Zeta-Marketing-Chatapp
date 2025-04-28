@@ -79,7 +79,7 @@ Only output the SQL code without any explanation.
         with st.spinner('Summarizing Results...'):
             # 2. Summarize the Query Results
             summary_prompt = f"Summarize these query results in 2-3 sentences:\n{rows}"
-            summary_response = model.predict(prompt=summary_prom,perature=0,_output_tokens=512)
+            summary_response = model.predict(prompt=summary_promt,perature=0,_output_tokens=512)
             summary_text = summary_response.text.strip()
 
             st.subheader("🔹 Summary:")
