@@ -5,11 +5,26 @@ from google.cloud import bigquery
 import os
 from vertexai.generative_models import GenerativeModel
 # --- Initialize GCP services ---
+from google.auth import credentials, load_credentials_from_file
+from google.oauth2 import service_account
 
-from google.auth import default
+# Streamlit file uploader to allow the user to upload the service account JSON key
+uploaded_file = st.file_uploader("Upload your Google Cloud Service Account JSON", type="json")
 
-# Use Application Default Credentials (ADC)
-credentials, project = default()
+if uploaded_file is not None:
+    # Load the credentials from the uploaded file
+    with open("temp_credentials.json", "wb") as f:
+        f.write(uploaded_file.getbuffer())
+
+    # Use the uploaded file for authentication
+    credentials = service_account.Credentials.from_service_account_file(
+        "temp_credentials.json"
+    )
+
+    # Now you can use the credentials to authenticate and make API calls
+    st.write(f"Authenticated with project: {credentials.project_id}")
+else:
+    st.write("Please upload a service account JSON file.")
 
 
 # Initialize Vertex AI and BigQuery Client
