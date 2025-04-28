@@ -10,7 +10,7 @@ import os
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "credentials/gcp_service_account.json"
 
 # Initialize Vertex AI and BigQuery Client
-vertexai.init(project="nth-baton-38771",ation="asia-south1")
+vertexai.init(project="nth-baton-38771",location="asia-south1")
 bq_client = bigquery.Client()
 
 # Load Gemini Model
