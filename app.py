@@ -25,6 +25,7 @@ else:    # Load the credentials from the uploaded file
     # Now you can use the credentials to authenticate and make API calls
     st.write(f"Authenticated with project: {credentials.project_id}")
 
+    project = credentials.project_id
     # Initialize Vertex AI and BigQuery Client
     vertexai.init(project=project, location="us-central1", credentials=credentials)
     bq_client = bigquery.Client(credentials= credentials, project=project)
