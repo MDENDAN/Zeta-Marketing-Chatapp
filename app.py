@@ -3,21 +3,21 @@ from vertexai.language_models import TextGenerationModel
 import vertexai
 from google.cloud import bigquery
 import os
-
+from vertexai.generative_models import GenerativeModel
 # --- Initialize GCP services ---
 
 # Setup credentials
 from google.auth import load_credentials_from_file
 
-credentials, project = load_credentials_from_file("./credentials/gcp_service_account.json")
+credentials, project = load_credentials_from_file(".secrets\credentials.json")
 
 
 # Initialize Vertex AI and BigQuery Client
-vertexai.init(project=project, location="asia-south1", credentials=credentials)
+vertexai.init(project=project, location="us-central1", credentials=credentials)
 bq_client = bigquery.Client(credentials= credentials, project=project)
 
 # Load Gemini Model
-model = TextGenerationModel.from_pretrained("gemini-1.5-pro-preview-0409")
+model = GenerativeModel(model_name="gemini-2.0-flash-001")
 
 # Available Datasets/Table Context
 DATASETS_INFO = """
@@ -58,11 +58,15 @@ Write a BigQuery Standard SQL query that correctly answers it.
 Only output the SQL code without any explanation.
 """
 
-        response = model.predict(prompt=prom,perature=0,_output_tokens=1024)
-        sql_query = response.text.strip()
+        response = model.generate_content(prompt,generation_config={
+        "temperature": 0,
+        "max_output_tokens": 512
+    }
+)
+        sql_query = response.text.replace("```sql", "").replace("```", "").strip()
 
         st.subheader("🔹 Generated SQL:")
-        st.code(sql_que,guage="sql")
+        st.code(sql_query)
 
     with st.spinner('Running Query on BigQuery...'):
         try:
@@ -82,7 +86,7 @@ Only output the SQL code without any explanation.
         with st.spinner('Summarizing Results...'):
             # 2. Summarize the Query Results
             summary_prompt = f"Summarize these query results in 2-3 sentences:\n{rows}"
-            summary_response = model.predict(prompt=summary_promt,perature=0,_output_tokens=512)
+            summary_response = model.generate_content(summary_prompt,generation_config={"temperature":0,"max_output_tokens":512})
             summary_text = summary_response.text.strip()
 
             st.subheader("🔹 Summary:")
